@@ -1,0 +1,43 @@
+<?php
+/*----------Código Generado por --------------*/
+/*-- Fecha : 22/11/2016 21:47:53--*/
+/*-- Autores : Roy Alex Standen Barraza - Edson Carrasco Gonzales--*/
+/*-- Contacto : roystandenb@gmail.com / edsoncarrascogonzalez@gmail.com --*/
+error_reporting(E_ALL);
+session_start();
+include_once("../modelo/conexion.php");
+include_once("../modelo/localesDeLaEmpresa.class.php");
+if(isset($_SESSION['usuario'])){
+@$ID_DIRECCION_EMPRESA = $_POST['ID_DIRECCION_EMPRESA'];
+@$ID_CATEGORIA_DE_LA_EMPRESA = $_POST['ID_CATEGORIA_DE_LA_EMPRESA'];
+@$CALLE_DIRECCION_EMPRESA = $_POST['CALLE_DIRECCION_EMPRESA'];
+@$NUMERO_DIRECCION_EMPRESA = $_POST['NUMERO_DIRECCION_EMPRESA'];
+@$DETALLE_DIRECCION_EMPRESA = $_POST['DETALLE_DIRECCION_EMPRESA'];
+@$ESTADO_DIRECCION_EMPRESA = $_POST['ESTADO_DIRECCION_EMPRESA'];
+@$LATITUD_DIRECCION_EMPRESA = $_POST['LATITUD_DIRECCION_EMPRESA'];
+@$LONGITUD_DIRECCION_EMPRESA = $_POST['LONGITUD_DIRECCION_EMPRESA'];
+@$SECTOR_DIRECCION_EMPRESA = $_POST['SECTOR_DIRECCION_EMPRESA'];
+$accion = $_GET['accion'];
+	if($accion=='crear'){
+		$objeto = new localesDeLaEmpresa($ID_DIRECCION_EMPRESA,$ID_CATEGORIA_DE_LA_EMPRESA,$CALLE_DIRECCION_EMPRESA,$NUMERO_DIRECCION_EMPRESA,$DETALLE_DIRECCION_EMPRESA,$ESTADO_DIRECCION_EMPRESA,$LATITUD_DIRECCION_EMPRESA,$LONGITUD_DIRECCION_EMPRESA,$SECTOR_DIRECCION_EMPRESA);
+		print $objeto->crear();
+	}else if($accion=='modificar'){
+		$objeto = new localesDeLaEmpresa($ID_DIRECCION_EMPRESA,$ID_CATEGORIA_DE_LA_EMPRESA,$CALLE_DIRECCION_EMPRESA,$NUMERO_DIRECCION_EMPRESA,$DETALLE_DIRECCION_EMPRESA,$ESTADO_DIRECCION_EMPRESA,$LATITUD_DIRECCION_EMPRESA,$LONGITUD_DIRECCION_EMPRESA,$SECTOR_DIRECCION_EMPRESA);
+		print $objeto->modificar();
+	}else if($accion=='eliminar'){
+		$objeto = new localesDeLaEmpresa($ID_DIRECCION_EMPRESA,$ID_CATEGORIA_DE_LA_EMPRESA,$CALLE_DIRECCION_EMPRESA,$NUMERO_DIRECCION_EMPRESA,$DETALLE_DIRECCION_EMPRESA,$ESTADO_DIRECCION_EMPRESA,$LATITUD_DIRECCION_EMPRESA,$LONGITUD_DIRECCION_EMPRESA,$SECTOR_DIRECCION_EMPRESA);
+		print $objeto->eliminar();
+	}else if($accion=='mostrar'){
+		$objeto = new localesDeLaEmpresa($ID_DIRECCION_EMPRESA,$ID_CATEGORIA_DE_LA_EMPRESA,$CALLE_DIRECCION_EMPRESA,$NUMERO_DIRECCION_EMPRESA,$DETALLE_DIRECCION_EMPRESA,$ESTADO_DIRECCION_EMPRESA,$LATITUD_DIRECCION_EMPRESA,$LONGITUD_DIRECCION_EMPRESA,$SECTOR_DIRECCION_EMPRESA);
+		echo $objeto->mostrar($_GET['Id'],$_GET['jtSorting'],$_GET['jtStartIndex'],$_GET['jtPageSize']);
+	}else if($accion=='comboboxCategoriasDelNegocioSeleccionado'){
+		$conexion = new Database();
+		$datos = $conexion->listarJtablesSinPaginador(" `CATEGORIA_DE_LA_EMPRESA` CE
+		                                                 INNER JOIN `CATEGORIA_EMPRESA` C
+														 ON(CE.ID_CATEGORIA_EMPRESA=C.ID_CATEGORIA_EMPRESA) "
+					," CE.`ID_CATEGORIA_DE_LA_EMPRESA` AS Value, CONCAT(C.`NOMBRE_CATEGORIA_EMPRESA`,' ',CE.`ROL_CATEGORIA_DE_LA_EMPRESA`) AS DisplayText ",
+					 " WHERE CE.ID_EMPRESAS_A_INTERVENIR = '".$_GET['ID_EMPRESAS_A_INTERVENIR']."' ");
+		echo json_encode($datos);	
+	}
+}
+?>
